@@ -1,0 +1,148 @@
+GITHUB_TOKEN: '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'
+
+# Path configuration used by the miner and analysis helpers.
+paths:
+  clone_path: "data/clone"
+  cache_path: "data/.cache"
+  scc_path: "utils/scc"
+
+# Global extraction switch.
+# When true, all feature_enabled(...) checks are treated as enabled.
+fetch_all: true
+
+# =========================
+# AST / Code-Level Features
+# =========================
+# This level is about source code structure, file changes, code size, and
+# commit/churn style metrics. It is the closest level to the repository's code.
+#
+# Current code-level feature switches:
+# - fetch_sloc
+#   Controlled keys:
+#   - gh_sloc
+#   - gh_test_lines_per_kloc
+# - fetch_commit_details
+#   Controlled keys:
+#   - gh_files_added
+#   - gh_files_deleted
+#   - gh_files_modified
+#   - gh_lines_added
+#   - gh_lines_deleted
+#   - gh_src_churn
+#   - gh_tests_added
+#   - gh_tests_deleted
+#   - gh_test_churn
+#   - gh_src_files
+#   - gh_doc_files
+#   - gh_other_files
+#   - gh_commits_on_files_touched
+#   - dockerfile_changed
+#   - docker_compose_changed
+#   - git_num_committers
+#   - git_commits
+#   - gh_team_size_last_3_month
+#
+# Note:
+# The repository also contains AST-oriented analysis code such as Java AST /
+# hotspot analysis, but those features are not yet exposed by the new main
+# extraction pipeline as explicit config keys.
+fetch_sloc: true
+fetch_commit_details: true
+
+# Time window for code-level team activity:
+# - gh_team_size_last_3_month
+recent_team_size_days: 90
+
+# Time window for code-level touched-files activity:
+# - gh_commits_on_files_touched
+touched_files_activity_days: 90
+
+# ==================
+# Run-Level Features
+# ==================
+# This is the main record level of the dataset.
+# One CSV row corresponds to one workflow run.
+#
+# Run-level base fields always produced:
+# - repo
+# - id_build
+# - workflow_id
+# - actor_name
+# - branch
+# - commit_sha
+# - languages
+# - status
+# - workflow_event_trigger
+# - conclusion
+# - created_at
+# - updated_at
+# - build_duration
+# - total_builds
+# - gh_first_commit_created_at
+# - build_language
+# - dependencies_count
+# - workflow_size
+# - test_frameworks
+# - workflow_name
+#
+# Run-level subviews:
+# - workflow_features
+#   - workflow_id
+#   - workflow_name
+#   - workflow_size
+# - pr_features
+#   Controlled by fetch_pull_request_details:
+#   - gh_is_pr
+#   - gh_num_pr_comments
+#   - git_merged_with
+#   - gh_pr_description_complexity
+# - repository_context_features
+#   - languages
+#   - build_language
+#   - dependencies_count
+#   - test_frameworks
+fetch_pull_request_details: true
+
+# ==================
+# Job-Level Features
+# ==================
+# This level is finer-grained than run-level.
+# It describes jobs inside a workflow run and test signals derived from job/log data.
+#
+# Job-level feature switches:
+# - fetch_job_details
+#   Controlled keys:
+#   - gh_job_id
+#   - total_jobs
+#   - job_details
+#   - tests_ran
+# - fetch_test_parsing_results
+#   Controlled keys:
+#   - tests_passed
+#   - tests_failed
+#   - tests_skipped
+#   - tests_total
+fetch_job_details: true
+fetch_test_parsing_results: true
+
+job:
+  previous_same_branch_build:
+    search_range_days: 30
+
+# ==========================
+# Legacy / Research Settings
+# ==========================
+# These settings come from the richer research-oriented version of the project.
+# They are kept here for compatibility and future integration into the new main pipeline.
+committer:
+  committer_fail_rate:
+    history_time_range_weeks: 4
+    recent_time_range_weeks: 1
+  cross_project_experience:
+    small_repository_run_nums: 1000
+    large_repository_nums: 3
+  committer_experience_weeks: 4
+
+build:
+  group_build_days: 14
+  group_build_nums: 20
