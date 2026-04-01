@@ -9,6 +9,16 @@ It supports two execution modes:
 The entrypoint is [CIMiner.py](/C:/Users/17554/PycharmProjects/Paper/ci_miner/CIMiner.py).
 It only parses CLI arguments and delegates execution to [core/main.py](/C:/Users/17554/PycharmProjects/Paper/ci_miner/core/main.py).
 
+## Environment Setup
+
+Install Python dependencies in your active Python environment:
+
+```bash
+pip install -r requirements.txt
+```
+
+The dependency file is [requirements.txt](/C:/Users/17554/PycharmProjects/Paper/ci_miner/requirements.txt).
+
 ## Architecture
 
 ```text
